@@ -2,18 +2,15 @@
   "users": [
     {
       "id": "1111111111",
-      "expiry": "2025-08-10",
-      "allowed": ["coinkeel"]
+      "expiry": "2025-08-31",
+      "allowed": ["coinkeel"],
+      "coinkeel_device": "null"
     },
     {
       "id": "2222222222",
-      "expiry": "2025-08-15",
-      "allowed": ["coinkeel", "freeltc"]
-    },
-    {
-      "id": "3333333333",
-      "expiry": "2025-08-20",
-      "allowed": ["freeltc"]
+      "expiry": "2025-08-31",
+      "allowed": ["freeltc"],
+      "freeltc_device": "null"
     }
   ]
 }

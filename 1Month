@@ -1,0 +1,42 @@
+<?php
+
+// GitHub Raw JSON link
+$github_url = "https://raw.githubusercontent.com/Pankajji1/Script/main/devices.json";
+
+// Step 1: Generate fingerprint based on device info
+function generateFingerprint() {
+    $uname = php_uname();                              // OS Info
+    $host = gethostname();                             // Hostname
+    $serial = @shell_exec("getprop ro.serialno");      // Device Serial
+    $raw = $uname . $host . $serial;
+    return substr(md5($raw), 0, 12);                   // Unique Fingerprint
+}
+
+$fingerprint = generateFingerprint();
+
+// Step 2: Fetch GitHub JSON (license database)
+$data = @file_get_contents($github_url);
+if (!$data) exit("❌ Cannot load license data from GitHub.\n");
+
+$json = json_decode($data, true);
+$devices = $json['devices'] ?? [];
+
+// Step 3: Check if fingerprint is authorized
+if (!isset($devices[$fingerprint])) {
+    exit("❌ Unauthorized device. This script is not licensed for this phone.\n");
+}
+
+$entry = $devices[$fingerprint];
+$telegram = $entry['telegram'] ?? 'Unknown';
+$expiry = $entry['expiry'] ?? '';
+
+// Step 4: Check license expiry
+if (!$expiry || strtotime($expiry) < time()) {
+    exit("⌛ License expired on $expiry\n");
+}
+
+// ✅ Step 5: Access Granted
+echo "✅ Access Granted!\n";
+echo "👤 Telegram: @$telegram\n";
+echo "🆔 Device Fingerprint: $fingerprint\n";
+echo "⏳ Valid till: $expiry\n";

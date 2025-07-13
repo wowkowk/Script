@@ -1,0 +1,16 @@
+{
+  "devices": {
+    "a3f92b7cde9a": {
+      "telegram": "Client123",
+      "expiry": "2025-08-31"
+    },
+    "b7d83f912e10": {
+      "telegram": "User456",
+      "expiry": "2025-09-15"
+    },
+    "c4e7f8a19b3d": {
+      "telegram": "Tester007",
+      "expiry": "2025-10-01"
+    }
+  }
+}

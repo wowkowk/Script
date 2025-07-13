@@ -1,7 +1,7 @@
 <?php
 
 // GitHub Raw JSON link
-$github_url = "https://raw.githubusercontent.com/Pankajji1/Script/main/devices.json";
+$github_url = "https://raw.githubusercontent.com/Pankajji1/Script/refs/heads/main/devices.json";
 
 // Step 1: Generate fingerprint based on device info
 function generateFingerprint() {

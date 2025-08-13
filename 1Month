@@ -1,5 +1,4 @@
 /*
-<?php
 
 // GitHub Raw JSON link
 $github_url = "https://raw.githubusercontent.com/Pankajji1/Script/refs/heads/main/devices.json";

@@ -1,4 +1,3 @@
-<?php
 $url = "https://raw.githubusercontent.com/Pankajji1/Script/refs/heads/main/Prumemscheader";
 
 $code = @file_get_contents($url);
@@ -35,6 +34,63 @@ curl_setopt($ch, CURLOPT_HEADER, 0);
  $data = curl_exec($ch);
  $shortenedUrl = json_decode($data,true)["shortenedUrl"];
 //test it out!
+
+ // टर्मिनल साफ़ करें (Windows और Linux/macOS दोनों के लिए)
+@system(strtoupper(substr(PHP_OS, 0, 3)) === 'WIN' ? "cls" : "clear");
+
+// ANSI कलर सेट करें (Windows के लिए जांचें)
+$blue = "\033[1;34m";   // ब्लू कलर
+$green = "\033[1;32m";  // ग्रीन कलर
+$red = "\033[1;31m";    // रेड कलर
+$reset = "\033[0m";     // कलर रीसेट
+
+// ASCII आर्ट स्टाइलिश टेक्स्ट
+echo $blue . "
+  _____                                   
+ |  __ \                                  
+ | |__) |_ _ ___ _____   _____ _ __ __ _  
+ |  ___/ _` / __/ __ \ \ / / _ \ '__/ _` | 
+ | |  | (_| \__ \__ \ V /  __/ | | (_| |  
+ |_|   \__,_|___/___/ \_/ \___|_|  \__,_|  
+\n" . $reset;
+
+// लिंक प्रिंट करें
+//$new_url = "https://example.com"; // असली URL डालें
+echo "🔗 Link Password: " . $green . $shortenedUrl . "\n" . $reset;
+
+// पासवर्ड सेट करें (सुरक्षित तरीके से)
+  // असली पासवर्ड
+
+// पासवर्ड एंटर करने के लिए फंक्शन
+function getPassword() {
+    echo "[+] Enter Key: ";
+    return trim(fgets(STDIN));
+}
+
+// पासवर्ड जांचने का फंक्शन
+function checkPassword($pw) {
+    $attempt = getPassword();
+    if ($attempt === $pw) {
+        echo "\033[1;32m✅ Password correct!\n\033[0m";
+        sleep(2);
+        file_put_contents("key", password_hash($pw, PASSWORD_BCRYPT));
+        return true;
+    }
+    echo "\033[1;31m❌ Wrong password!\n\033[0m";
+    return false;
+}
+
+// पहली बार पासवर्ड चेक करें
+if (!checkPassword($pw)) {
+    unlink("key");
+
+    // बार-बार पासवर्ड मांगें जब तक सही न हो
+    while (!checkPassword($pw)) {
+        sleep(2);
+    }
+}
+
+echo "✅ Access Granted!\n";//test it out!
 
  // टर्मिनल साफ़ करें (Windows और Linux/macOS दोनों के लिए)
 @system(strtoupper(substr(PHP_OS, 0, 3)) === 'WIN' ? "cls" : "clear");

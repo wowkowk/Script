@@ -1,39 +1,88 @@
 <?php
-/*
-// GitHub Raw JSON link
-$github_url = "https://raw.githubusercontent.com/Pankajji1/Script/refs/heads/main/devices.json";
-
-// Step 1: Generate fingerprint based on device info
-function generateFingerprint() {
-    $uname = php_uname();                              // OS Info
-    $host = gethostname();                             // Hostname
-    $serial = @shell_exec("getprop ro.serialno");      // Device Serial
-    $raw = $uname . $host . $serial;
-    return substr(md5($raw), 0, 12);                   // Unique Fingerprint
+function getRandomString() {
+    return uniqid();
 }
 
-$fingerprint = generateFingerprint();
+ $pw =getRandomString();
+ function get_tiny_url($url){
+	$ch = curl_init();
+	$timeout = 5;
+	curl_setopt($ch,CURLOPT_URL,'http://tinyurl.com/api-create.php?url='.$url);
+	curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
+	curl_setopt($ch,CURLOPT_CONNECTTIMEOUT,$timeout);
+	$data = curl_exec($ch);
+	curl_close($ch);
+	return $data;
+}
+ $res = curl('https://dpaste.org', null, rentry())[1];
+ $csrfmiddlewaretoken = explode('">',explode('name="csrfmiddlewaretoken" value="',$res)[1])[0];
+ 
+ $res = curl('https://dpaste.org', "csrfmiddlewaretoken=$csrfmiddlewaretoken&title=&lexer=python&expires=3600&content=$pw", rentry())[1];
+ $canonical = explode('"/>',explode('<input type="text" id="copyToClipboardField" value="https://dpaste.org/',$res)[1])[0];
+///$newurl=get_tiny_url("https://dpaste.org/$canonical/raw");
+$ch = curl_init("https://link4url.com/api?api=f4c495350f22d1d090a9d51f79ce19547159ae16&url=https://dpaste.org/$canonical/raw"); // such as http://example.com/example.xml
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_HEADER, 0);
+ $data = curl_exec($ch);
+ $shortenedUrl = json_decode($data,true)["shortenedUrl"];
+//test it out!
 
-// Step 2: Fetch GitHub JSON (license database)
-$data = @file_get_contents($github_url);
-if (!$data) exit("❌ Cannot load license data from GitHub.\n");
+ // टर्मिनल साफ़ करें (Windows और Linux/macOS दोनों के लिए)
+@system(strtoupper(substr(PHP_OS, 0, 3)) === 'WIN' ? "cls" : "clear");
 
-$json = json_decode($data, true);
-$devices = $json['devices'] ?? [];
+// ANSI कलर सेट करें (Windows के लिए जांचें)
+$blue = "\033[1;34m";   // ब्लू कलर
+$green = "\033[1;32m";  // ग्रीन कलर
+$red = "\033[1;31m";    // रेड कलर
+$reset = "\033[0m";     // कलर रीसेट
 
-// Step 3: Check if fingerprint is authorized
-if (!isset($devices[$fingerprint])) {
-    exit("❌ Unauthorized device. This script is not licensed for this phone.\n");
+// ASCII आर्ट स्टाइलिश टेक्स्ट
+echo $blue . "
+  _____                                   
+ |  __ \                                  
+ | |__) |_ _ ___ _____   _____ _ __ __ _  
+ |  ___/ _` / __/ __ \ \ / / _ \ '__/ _` | 
+ | |  | (_| \__ \__ \ V /  __/ | | (_| |  
+ |_|   \__,_|___/___/ \_/ \___|_|  \__,_|  
+\n" . $reset;
+
+// लिंक प्रिंट करें
+//$new_url = "https://example.com"; // असली URL डालें
+echo "🔗 Link Password: " . $green . $shortenedUrl . "\n" . $reset;
+
+// पासवर्ड सेट करें (सुरक्षित तरीके से)
+  // असली पासवर्ड
+
+// पासवर्ड एंटर करने के लिए फंक्शन
+function getPassword() {
+    echo "[+] Enter Key: ";
+    return trim(fgets(STDIN));
 }
 
-$entry = $devices[$fingerprint];
-$telegram = $entry['telegram'] ?? 'Unknown';
-$expiry = $entry['expiry'] ?? '';
-
-// Step 4: Check license expiry
-if (!$expiry || strtotime($expiry) < time()) {
-    exit("⌛ License expired on $expiry\n");
+// पासवर्ड जांचने का फंक्शन
+function checkPassword($pw) {
+    $attempt = getPassword();
+    if ($attempt === $pw) {
+        echo "\033[1;32m✅ Password correct!\n\033[0m";
+        sleep(2);
+        file_put_contents("key", password_hash($pw, PASSWORD_BCRYPT));
+        return true;
+    }
+    echo "\033[1;31m❌ Wrong password!\n\033[0m";
+    return false;
 }
+
+// पहली बार पासवर्ड चेक करें
+if (!checkPassword($pw)) {
+    unlink("key");
+
+    // बार-बार पासवर्ड मांगें जब तक सही न हो
+    while (!checkPassword($pw)) {
+        sleep(2);
+    }
+}
+
+echo "✅ Access Granted!\n";
 
 // ✅ Step 5: Access Granted
 echo "✅ Access Granted!\n";

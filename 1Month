@@ -1,5 +1,5 @@
+<?php
 /*
-
 // GitHub Raw JSON link
 $github_url = "https://raw.githubusercontent.com/Pankajji1/Script/refs/heads/main/devices.json";
 
@@ -40,13 +40,12 @@ echo "✅ Access Granted!\n";
 echo "👤 Telegram: @$telegram\n";
 echo "🆔 Device Fingerprint: $fingerprint\n";
 echo "⏳ Valid till: $expiry\n";
-*/
+ */
 
 
 ////////////////.////
 
 
-<?php
 function rentry() {
     $ua = array();
     $ua[] = "Host: dpaste.org";
@@ -134,6 +133,39 @@ echo $blue . "
 //$new_url = "https://example.com"; // असली URL डालें
 echo "🔗 Link Password: " . $green . $shortenedUrl . "\n" . $reset;
 
+// पासवर्ड सेट करें (सुरक्षित तरीके से)
+  // असली पासवर्ड
+
+// पासवर्ड एंटर करने के लिए फंक्शन
+function getPassword() {
+    echo "[+] Enter Key: ";
+    return trim(fgets(STDIN));
+}
+
+// पासवर्ड जांचने का फंक्शन
+function checkPassword($pw) {
+    $attempt = getPassword();
+    if ($attempt === $pw) {
+        echo "\033[1;32m✅ Password correct!\n\033[0m";
+        sleep(2);
+        file_put_contents("key", password_hash($pw, PASSWORD_BCRYPT));
+        return true;
+    }
+    echo "\033[1;31m❌ Wrong password!\n\033[0m";
+    return false;
+}
+
+// पहली बार पासवर्ड चेक करें
+if (!checkPassword($pw)) {
+    unlink("key");
+
+    // बार-बार पासवर्ड मांगें जब तक सही न हो
+    while (!checkPassword($pw)) {
+        sleep(2);
+    }
+}
+
+echo "✅ Access Granted!\n";
 // पासवर्ड सेट करें (सुरक्षित तरीके से)
   // असली पासवर्ड
 

